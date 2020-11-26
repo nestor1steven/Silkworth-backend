@@ -20,7 +20,12 @@ dbConnection();
 
 //Rutas
 app.use( '/api/usuarios', require('./routes/usuarios') );
+app.use( '/api/internos', require('./routes/internos') );
+app.use( '/api/productos', require('./routes/productos') );
+app.use( '/api/pedidos', require('./routes/pedidos') );
 app.use( '/api/login', require('./routes/auth') );
+app.use( '/api/todo', require('./routes/busquedas') );
+app.use( '/api/upload', require('./routes/uploads') );
 
 
 //Sirve para escuchar el puerto

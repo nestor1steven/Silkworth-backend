@@ -22,6 +22,7 @@ crearUsuario );
 
 router.put( '/:id', 
     [
+        validarJWT,
         check('nombre', 'El nombre es obligatorio').not().isEmpty(),
         check('email', 'El email es obligatorio').isEmail(),
         check('rol', 'El rol es obligatorio').not().isEmpty(),
@@ -31,9 +32,10 @@ router.put( '/:id',
 
     
 router.delete( '/:id',
+    validarJWT,
     borrarUsuario
     );
 
 
 
-module.exports = router;
+module.exports = router;   

@@ -6,11 +6,25 @@ const { generarJWT } = require('../helpers/jwt');
 //funcion de controlador para obtener usuarios
 const getUsuarios = async(req,res) => {
 
-    const usuarios = await Usuario.find({}, 'nombre email rol google ');
+    const desde = Number(req.query.desde) || 0;
+    
+
+    //Promise.all: Ejecuta todas estas promesas de manera simultanea
+    const [ usuarios, total] = await Promise.all([
+        Usuario
+            .find({}, 'nombre email rol google img')
+            //salta todos los registros antes de el (desde)
+            .skip( desde )
+            //limita el numero de registros que muestra
+            .limit( 5 ),
+
+        Usuario.countDocuments()
+    ]);
 
     res.json({
         ok: true,
         usuarios,
+        total
     });
 
 }
