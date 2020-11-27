@@ -37,7 +37,11 @@ crearInterno );
 
 
 router.put( '/:id', 
-    [],
+[
+    validarJWT,
+    check('nombre', 'El nombre del interno es necesario').not().isEmpty(),
+    validarCampos
+],
     actualizarInterno);
 
     

@@ -53,20 +53,77 @@ const crearPedidos = async(req, res = response) => {
     }
 }
 
-const actualizarPedidos = (req, res = response) => {
+const actualizarPedidos = async(req, res = response) => {
 
-    res.json({
-        ok: true,
-        msg: 'Actualizar Pedidos'
-    })
+    const id = req.params.id;
+    const uid = req.uid;
+
+    try {
+        
+        const pedido = await Pedido.findById( id );
+
+        if ( !pedido ) {
+            return res.status(404).json({
+                ok: true,
+                msg: 'Pedido no encontrado'
+            });
+
+        }
+
+        const cambiosPedido = {
+            ...req.body,
+            usuario: uid 
+        }
+
+        const pedidoActualizado = await Pedido.findByIdAndUpdate( id, cambiosPedido, { new:true } );
+
+        res.json({
+            ok: true,
+            pedido: pedidoActualizado
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo actualizar el Pedido'
+        });
+    }
 }
 
-const borrarPedidos = (req, res = response) => {
+const borrarPedidos = async(req, res = response) => {
 
-    res.json({
-        ok: true,
-        msg: 'Borrar Pedidos'
-    })
+    const id = req.params.id;
+
+    try {
+        
+        const pedido = await Pedido.findById( id );
+
+        if ( !pedido ) {
+            return res.status(404).json({
+                ok: true,
+                msg: 'Pedido no encontrado'
+            });
+
+        }
+
+
+        await Pedido.findByIdAndDelete( id );
+
+        res.json({
+            ok: true,
+            msg: 'Pedido eliminado'
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo eliminar el Pedido'
+        });
+    }
 }
 
 

@@ -43,7 +43,11 @@ crearPedidos);
 
 
 router.put( '/:id', 
-    [],
+    [
+        validarJWT,
+        check('calle', 'La calle esta vacia').not().isEmpty(),
+        validarCampos
+    ],
     actualizarPedidos);
 
     

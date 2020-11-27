@@ -16,7 +16,8 @@ const {
     crearProducto,
     actualizarProducto,
     borrarProducto,
-} = require('../controllers/productos')
+} = require('../controllers/productos');
+const validarJwt = require('../middlewares/validar-jwt');
 
 
 const router = Router();
@@ -38,7 +39,11 @@ crearProducto);
 
 
 router.put( '/:id', 
-    [],
+    [
+        validarJWT,
+        check('titulo','El nombre del hospital es necesario').not().isEmpty(),
+        validarCampos
+    ],
     actualizarProducto);
 
     

@@ -57,20 +57,79 @@ const crearInterno = async(req, res = response) => {
 
 }
 
-const actualizarInterno = (req, res = response) => {
+const actualizarInterno = async(req, res = response) => {
 
-    res.json({
-        ok: true,
-        msg: 'Actualizar interno'
-    })
+    const id = req.params.id;
+    const uid = req.uid;
+
+    try {
+        
+        const interno = await Interno.findById( id );
+
+        if ( !interno ) {
+            return res.status(404).json({
+                ok: true,
+                msg: 'Interno no encontrado'
+            });
+
+        }
+
+        const cambiosInterno = {
+            ...req.body,
+            usuario: uid 
+        }
+
+        const internoActualizado = await Interno.findByIdAndUpdate( id, cambiosInterno, { new:true } );
+
+        res.json({
+            ok: true,
+            interno: internoActualizado
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo actualizar el Interno'
+        });
+    }
+
 }
 
-const borrarInterno = (req, res = response) => {
+const borrarInterno = async(req, res = response) => {
 
-    res.json({
-        ok: true,
-        msg: 'Borrar interno'
-    })
+    const id = req.params.id;
+
+    try {
+        
+        const interno = await Interno.findById( id );
+
+        if ( !interno ) {
+            return res.status(404).json({
+                ok: true,
+                msg: 'Interno no encontrado'
+            });
+
+        }
+
+        
+
+        const internoEliminado = await Interno.findByIdAndDelete( id );
+
+        res.json({
+            ok: true,
+            msg: 'Interno eliminado'
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo eliminar el Interno'
+        });
+    }
 }
 
 
