@@ -1,5 +1,6 @@
 const { response } = require("express");
 const Interno = require('../models/interno');
+const { generarJWT } = require('../helpers/jwt');
 
 const getInternos = async(req, res = response) => {
 
@@ -25,12 +26,43 @@ const getInternos = async(req, res = response) => {
     })
 }
 
+const getUnInterno = async(req, res = response) => {
+    
+    const id = req.params.id;
+
+    try {
+        
+        const interno = await Interno.findById( id );
+
+        if ( !interno ) {
+            return res.status(404).json({
+                ok: true,
+                msg: 'Interno no encontrado'
+            });
+
+        }
+        
+
+        res.json({
+            ok: true,
+            interno
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'No se pudo actualizar el Interno'
+        });
+    }
+}
+
 const crearInterno = async(req, res = response) => {
 
     const uid = req.uid;
     const interno = new Interno( { usuario: uid, ...req.body});
 
-    console.log( interno ); 
     
     try {
         
@@ -38,12 +70,14 @@ const crearInterno = async(req, res = response) => {
         
         
 
+        //Generamos un TOKEN - JWT
+        const token = await generarJWT( interno.id );
         res.json({
             ok: true,
             interno: internoDB
         });
         
-        
+
     } catch (error) {
         res.status(500).json({
             ok: false,
@@ -138,4 +172,5 @@ module.exports = {
     crearInterno,
     actualizarInterno,
     borrarInterno,
+    getUnInterno
 }

@@ -9,11 +9,9 @@ const getProductos = async(req, res = response) => {
     const [ productos, total] = await Promise.all([
         Producto.find()
                 //Trae los campos de oros documentos
-                .populate('usuario','nombre')
+                .populate('usuario','nombre'),
                 //salta todos los registros antes de el (desde)
-                .skip( desde )
                 //limita el numero de registros que muestra
-                .limit( 5 ),
         
         Producto.countDocuments()
     ]);

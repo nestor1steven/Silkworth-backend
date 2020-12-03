@@ -25,7 +25,7 @@ const PedidoSchema = Schema({
         required: true
     },
     estatus: {
-        type: String,
+        type: Boolean,
         required: true
     },
     cp: {

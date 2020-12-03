@@ -15,13 +15,15 @@ const {
     getInternos,
     crearInterno,
     actualizarInterno,
-    borrarInterno
+    borrarInterno,
+    getUnInterno
 } = require('../controllers/internos')
 
 
 const router = Router();
 
 router.get( '/' ,getInternos);
+router.get( '/:id', getUnInterno);
 
 router.post( '/', 
 [

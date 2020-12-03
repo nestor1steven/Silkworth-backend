@@ -11,7 +11,7 @@ const getPedidos = async(req, res = response) => {
         Pedido.find()
                 //Trae los campos de oros documentos
                 .populate('usuario','nombre')
-                .populate('producto','titulo')
+                .populate('producto','titulo precio img')
                 //salta todos los registros antes de el (desde)
                 .skip( desde )
                 //limita el numero de registros que muestra
@@ -32,7 +32,6 @@ const getPedidos = async(req, res = response) => {
 const crearPedidos = async(req, res = response) => {
 
     const uid = req.uid;
-    console.log( uid ); 
     const pedido = new Pedido( { usuario: uid, ...req.body});
 
 

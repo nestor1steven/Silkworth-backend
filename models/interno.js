@@ -49,7 +49,8 @@ const InternoSchema = Schema({
         default: 'Veronica Sanchez Mercado'
     },
     egresado: {
-        type: String,
+        type: Boolean,
+        default: false
     },
     img: {
         type: String,
@@ -62,7 +63,9 @@ const InternoSchema = Schema({
 }, { collection: 'internos' });
 
 InternoSchema.method('toJSON', function(){
-    const { __v, ...object  } = this.toObject();
+    const { __v, _id, ...object  } = this.toObject();
+
+    object.uid = _id;
     return object
 })
 

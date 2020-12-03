@@ -33,9 +33,6 @@ const crearUsuario = async(req,res = response) => {
 
     const { email, password } = req.body;
 
-    
-
-
     try {
         
         const existeEmail = await Usuario.findOne({ email });
@@ -43,7 +40,7 @@ const crearUsuario = async(req,res = response) => {
         if ( existeEmail ) {
             return res.status(400).json({
                 ok: false,
-                msg: 'El correo ya esta registrado'
+                msg: 'El correo ya está registrado'
             })
         }
 
@@ -64,10 +61,11 @@ const crearUsuario = async(req,res = response) => {
         //Generamos un TOKEN - JWT
         const token = await generarJWT( usuario.id );
 
-
+        
         res.json({
             ok: true,
-            usuario
+            usuario,
+            token
         });
 
     } catch (error) {
@@ -116,7 +114,16 @@ const actualizarUsuario = async(req, res = response) => {
             }
         }
    
-        campos.email = email;
+        if ( !usuarioDB.google ){
+
+            campos.email = email;
+
+        }else if ( usuarioDB.email !== email) {
+             return res.status(400).json({
+                ok: false,
+                msg: 'Usuarios de google no pueden cambiar su correo' 
+            });
+        }
 
         const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, {new: true });
 
